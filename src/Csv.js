@@ -1,5 +1,4 @@
 import Papa from 'papaparse';
-
 import jsonexport from 'jsonexport/dist';
 import Promise from 'bluebird';
 import _zip from 'lodash/zip';
