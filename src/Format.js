@@ -9,7 +9,7 @@ import _clone from 'lodash/clone';
 let Format = (() => {
   function reCalculateValues (data, components) {
     data.forEach((d) => {
-      d = d.data;
+      d = d.data || d;
       // Check all components having calculated values
       components.forEach((c) => {
         if (c.calculateValue) {
