@@ -3,7 +3,14 @@
 const path = require('path');
 const env = require('yargs').argv.env; // use --env with webpack 2
 const pkg = require('./package.json');
+// const BundleAnalyzerPlugin = require('webpack-bundle-analyzer').BundleAnalyzerPlugin;
+const showBundle = false;
+var LodashModuleReplacementPlugin = require('lodash-webpack-plugin');
+let plugins = [new LodashModuleReplacementPlugin()];
 
+if (showBundle) {
+  // plugins.push(new BundleAnalyzerPlugin());
+}
 let libraryName = pkg.name;
 
 let outputFile, minimize;
@@ -35,7 +42,11 @@ const config = {
       {
         test: /(\.jsx|\.js)$/,
         loader: 'babel-loader',
-        exclude: /(node_modules|bower_components)/
+        exclude: /(node_modules|bower_components)/,
+        options: {
+          plugins: ['lodash'],
+          presets: [['env', { modules: false, targets: { node: 4 } }]]
+        }
       },
       {
         test: /(\.jsx|\.js)$/,
@@ -44,6 +55,7 @@ const config = {
       }
     ]
   },
+  plugins: plugins,
   resolve: {
     modules: [path.resolve('./node_modules'), path.resolve('./src')],
     extensions: ['.json', '.js'],
@@ -57,7 +69,20 @@ const config = {
       commonjs2: 'lodash',
       amd: '_',
       root: '_'
-    }
+    },
+    flat: 'flat',
+    i18next: 'i18next',
+    formiojs: 'formiojs',
+    jsonexport: 'jsonexport',
+    papaparse: 'papaparse'
+  },
+  node: {
+    // prevent webpack from injecting mocks to Node native modules
+    // that does not make sense for the client
+    dgram: 'empty',
+    fs: 'empty',
+    net: 'empty',
+    tls: 'empty'
   }
 };
 
